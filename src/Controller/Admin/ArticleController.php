@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Article;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
+use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,11 +27,15 @@ class ArticleController extends AbstractController
     #[Route('/new', name: 'app_article_new', methods: ['GET', 'POST'])]
     public function new(Request $request, ArticleRepository $articleRepository): Response
     {
+        $user = $this->getUser();
         $article = new Article();
+        $article->setAuthor($user);
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $currentDate = new DateTime();
+            $article->setPublishDate($currentDate);
             $articleRepository->save($article, true);
 
             return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);

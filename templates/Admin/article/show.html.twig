@@ -22,7 +22,11 @@
 			</tr>
 			<tr>
 				<th>PublishDate</th>
-				<td>{{ article.publishDate ? article.publishDate|date('Y-m-d H:i:s') : '' }}</td>
+				<td>{{ article.publishDate ? article.publishDate|date('d/m/Y H:i:s') : '' }}</td>
+			</tr>
+			<tr>
+				<th>Author</th>
+				<td>{{ article.author.pseudo }}</td>
 			</tr>
 		</tbody>
 	</table>
