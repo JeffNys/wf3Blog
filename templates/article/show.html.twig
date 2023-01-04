@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ article.title }}
+{% endblock %}
+
+{% block body %}
+	<h1>{{ article.title }}</h1>
+
+	<p>date:
+		{{ article.publishDate | date("d/m/Y") }}
+	</p>
+
+	<div>
+		{{ article.content }}
+	</div>
+
+	<hr class="mt-2">
+
+	<p>Author:
+		{{ article.author.pseudo }}
+	</p>
+
+	<p>Category:
+		{{ article.category.name }}
+	</p>
+
+	<h3>Commentaires:
+	</h3>
+	<ul>
+		{% for comment in comments %}
+			<li>{{comment.title }}
+				:
+				{{ comment.content }}</li>
+		{% else %}
+			<li>There is not comments actually</li>
+		{% endfor %}
+	</ul>
+	{# {{ dump(comments) }} #}
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}The articles
+{% endblock %}
+
+{% block body %}
+	<h1>The articles</h1>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Title</th>
+				<th>PublishDate</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for article in articles %}
+				<tr>
+					<td>
+						<a href="{{ path("app_article_show", {"article": article.id } ) }}">{{ article.title }}</a>
+					</td>
+					<td>{{ article.publishDate ? article.publishDate|date('d/m/Y H:i:s') : '' }}</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="5">no articles found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
