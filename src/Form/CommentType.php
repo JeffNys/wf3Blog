@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Article;
 use App\Entity\Comment;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,9 +17,11 @@ class CommentType extends AbstractType
             ->add('title')
             ->add('content')
             ->add('author')
-            ->add('publishDate')
-            ->add('article')
-        ;
+            // ->add('publishDate')
+            ->add('article', EntityType::class, [
+                "class" => Article::class,
+                "choice_label" => "title",
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
