@@ -24,8 +24,8 @@
 					<td>{{ article.content }}</td>
 					<td>{{ article.publishDate ? article.publishDate|date('d/m/Y H:i:s') : '' }}</td>
 					<td>
-						<a href="{{ path('app_article_show', {'id': article.id}) }}" class="btn btn-sm btn-primary">show</a>
-						<a href="{{ path('app_article_edit', {'id': article.id}) }}" class="btn btn-sm btn-warning">edit</a>
+						<a href="{{ path('app_admin_article_show', {'id': article.id}) }}" class="btn btn-sm btn-primary">show</a>
+						<a href="{{ path('app_admin_article_edit', {'id': article.id}) }}" class="btn btn-sm btn-warning">edit</a>
 					</td>
 				</tr>
 			{% else %}
@@ -36,5 +36,5 @@
 		</tbody>
 	</table>
 
-	<a href="{{ path('app_article_new') }}" class="btn btn-primary mt-4">Create new</a>
+	<a href="{{ path('app_admin_article_new') }}" class="btn btn-primary mt-4">Create new</a>
 {% endblock %}
