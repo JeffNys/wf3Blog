@@ -27,15 +27,20 @@
 
 	<h3>Commentaires:
 	</h3>
-	<ul>
-		{% for comment in comments %}
-			<li>{{comment.title }}
-				:
-				{{ comment.content }}</li>
-		{% else %}
-			<li>There is not comments actually</li>
-		{% endfor %}
-	</ul>
+
+	<hr>
+	{% for comment in comments %}
+		<h6>{{comment.title }}</h6>
+		<p>{{ comment.content }}</p>
+		<p>by:
+			{{ comment.author }}
+			- date:
+			{{ comment.publishDate | date("d/m/Y H:i") }}
+		</p>
+		<hr>
+	{% else %}
+		<p>There is not comments actually</p>
+	{% endfor %}
 
 	<a href="{{ path("app_article_comment", {"article" : article.id }) }}" class="btn btn-primary">Post a comment</a>
 	{# {{ dump(comments) }} #}
