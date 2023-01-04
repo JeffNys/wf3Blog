@@ -15,9 +15,8 @@
 		{{ article.content }}
 	</div>
 
-	<hr class="mt-2">
 
-	<p>Author:
+	<p class="mt-2">Author:
 		{{ article.author.pseudo }}
 	</p>
 
@@ -25,8 +24,8 @@
 		{{ article.category.name }}
 	</p>
 
-	<h3>Commentaires:
-	</h3>
+	<h5 class="mt-4">Commentaires:
+	</h5>
 
 	<hr>
 	{% for comment in comments %}
