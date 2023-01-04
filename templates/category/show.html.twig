@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ category.name }}
+{% endblock %}
+
+{% block body %}
+	<h1>{{ category.name }}</h1>
+
+	<p>description:
+		{{ category.description }}</p>
+
+
+	<h4>articles</h4>
+
+	{% for article in articles %}
+		<hr>
+		<h5>
+			<a href="{{ path("app_article_show", {"article" : article.id}) }}">{{ article.title }}</a>
+		</h5>
+		<p>by:
+			{{ article.author.pseudo }}, date:
+			{{ article.publishDate | date("d/m/Y") }}</p>
+	{% else %}
+		no articles in this category
+	{% endfor %}
+	<hr>
+
+{% endblock %}

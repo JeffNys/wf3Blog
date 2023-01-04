@@ -21,7 +21,7 @@
 	</p>
 
 	<p>Category:
-		{{ article.category.name }}
+		<a href="{{ path("app_category_show", {"category" : article.category.id}) }}">{{ article.category.name }}</a>
 	</p>
 
 	<h5 class="mt-4">Commentaires:
