@@ -36,5 +36,7 @@
 			<li>There is not comments actually</li>
 		{% endfor %}
 	</ul>
+
+	<a href="{{ path("app_article_comment", {"article" : article.id }) }}" class="btn btn-primary">Post a comment</a>
 	{# {{ dump(comments) }} #}
 {% endblock %}
