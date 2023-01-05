@@ -65,6 +65,9 @@ class ArticleController extends AbstractController
     #[Route('/article/{article}/comment', name: 'app_article_comment')]
     public function comment(Article $article, CommentRepository $commentRepo, Request $request): Response
     {
+        /**
+         * @var User
+         */
         $user = $this->getUser();
         $comment = new Comment();
         if ($user) {
