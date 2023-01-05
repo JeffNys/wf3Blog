@@ -15,16 +15,41 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ArticleController extends AbstractController
 {
-    #[Route('/article', name: 'app_article')]
-    public function index(ArticleRepository $articleRepo): Response
+    #[Route('/article/{page}', name: 'app_article', defaults: ["page" => 1])]
+    public function index(ArticleRepository $articleRepo, int $page): Response
     {
-        $articles = $articleRepo->findAll();
+        $itemPerPage = 2;
+        $itemsCount = $articleRepo->count([]);
+        $pages = [];
+        $pageCounter = 0;
+        for ($i = 0; $i < $itemsCount; $i += $itemPerPage) {
+            $pageCounter++;
+            $pages[] = $pageCounter;
+        }
+        // check if $page is consistent
+        if ($page < 1) {
+            $page = 1;
+        }
+        if ($page > $itemsCount / $itemPerPage) {
+            $page = $pageCounter;
+        }
+
+        $articles = $articleRepo->findBy(
+            [],
+            [],
+            $itemPerPage,
+            ($page - 1) * $itemPerPage,
+        );
+
         return $this->render('article/index.html.twig', [
             "articles" => $articles,
+            'actualPage' => $page,
+            'pages' => $pages,
+            'lastPage' => $pageCounter,
         ]);
     }
 
-    #[Route('/article/{article}', name: 'app_article_show')]
+    #[Route('/article/{article}/show', name: 'app_article_show')]
     public function show(Article $article, CommentRepository $commentRepo): Response
     {
         $comments = $commentRepo->findBy([

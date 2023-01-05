@@ -5,7 +5,7 @@
 
 {% block body %}
 	<h1>The articles</h1>
-
+	{# {{ dump(articles) }} #}
 	<table class="table">
 		<thead>
 			<tr>
@@ -28,4 +28,20 @@
 			{% endfor %}
 		</tbody>
 	</table>
+
+	<div>
+		<ul class="pagination">
+			<li class="page-item {% if actualPage == 1 %}disabled{% endif %}">
+				<a class="page-link" href="{{ path('app_article', {'page': actualPage - 1}) }}">&laquo;</a>
+			</li>
+			{% for page in pages %}
+				<li class="page-item {% if actualPage == page %}active{% endif %}">
+					<a class="page-link" href="{{ path('app_article', {'page': page}) }}">{{ page }}</a>
+				</li>
+			{% endfor %}
+			<li class="page-item {% if actualPage == lastPage %}disabled{% endif %}">
+				<a class="page-link" href="{{ path('app_article', {'page': actualPage + 1}) }}">&raquo;</a>
+			</li>
+		</ul>
+	</div>
 {% endblock %}
