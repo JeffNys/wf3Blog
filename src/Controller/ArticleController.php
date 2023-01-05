@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use DateTime;
+use App\Entity\User;
 use App\Entity\Article;
 use App\Entity\Comment;
 use App\Form\PublicCommentType;
