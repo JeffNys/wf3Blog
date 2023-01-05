@@ -26,6 +26,7 @@ class ArticleController extends AbstractController
             $pageCounter++;
             $pages[] = $pageCounter;
         }
+
         // check if $page is consistent
         if ($page < 1) {
             $page = 1;
