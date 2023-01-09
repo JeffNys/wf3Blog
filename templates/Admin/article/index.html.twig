@@ -21,7 +21,7 @@
 				<tr>
 					<td>{{ article.id }}</td>
 					<td>{{ article.title }}</td>
-					<td>{{ article.content }}</td>
+					<td>{{ article.content | raw }}</td>
 					<td>{{ article.publishDate ? article.publishDate|date('d/m/Y H:i:s') : '' }}</td>
 					<td>
 						<a href="{{ path('app_admin_article_show', {'id': article.id}) }}" class="btn btn-sm btn-primary">show</a>

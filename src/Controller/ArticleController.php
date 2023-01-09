@@ -19,21 +19,60 @@ class ArticleController extends AbstractController
     #[Route('/article/{page}', name: 'app_article', defaults: ["page" => 1])]
     public function index(ArticleRepository $articleRepo, int $page): Response
     {
-        $itemPerPage = 2;
+        $itemPerPage = 3;
+        $adjacents = 2;
         $itemsCount = $articleRepo->count([]);
-        $pages = [];
-        $pageCounter = 0;
-        for ($i = 0; $i < $itemsCount; $i += $itemPerPage) {
-            $pageCounter++;
-            $pages[] = $pageCounter;
-        }
-
+        $totalPages =  (int)floor($itemsCount / $itemPerPage);
         // check if $page is consistent
         if ($page < 1) {
             $page = 1;
         }
-        if ($page > $itemsCount / $itemPerPage) {
-            $page = $pageCounter;
+        if ($page > $totalPages) {
+            $page = $totalPages;
+        }
+
+        $pivot = 0;
+        $startFar = true;
+        $endFar = true;
+        $pages = [];
+
+        if ($totalPages < 2 * $adjacents + 2) {
+            // if there is not enought page for respect adjacents
+            for ($i = 1; $i < $totalPages + 1; $i++) {
+                $pages[] = $i;
+            }
+        } else {
+            if ($page < $adjacents + 2) {
+                // if we are not so far to start
+                $pivot = $adjacents + 1;
+                $startFar = false;
+            } elseif ($page > $totalPages - ($adjacents + 1)) {
+                // if we are not so far to end
+                $pivot = $totalPages - $adjacents;
+                $endFar = false;
+            } else {
+                $pivot = $page;
+            }
+
+            $pages[] = $pivot;
+            for ($i = 1; $i < $adjacents - 1; $i++) {
+                array_push($pages, $pivot + $i);
+                array_unshift($pages, $pivot - $i);
+            }
+            if ($startFar) {
+                array_unshift($pages, "...");
+            } else {
+                array_unshift($pages, 2);
+            }
+
+            if ($endFar) {
+                array_push($pages, "...");
+            } else {
+                array_push($pages, $totalPages - 1);
+            }
+
+            array_push($pages, $totalPages);
+            array_unshift($pages, 1);
         }
 
         $articles = $articleRepo->findBy(
@@ -47,7 +86,7 @@ class ArticleController extends AbstractController
             "articles" => $articles,
             'actualPage' => $page,
             'pages' => $pages,
-            'lastPage' => $pageCounter,
+            'lastPage' => $totalPages,
         ]);
     }
 
