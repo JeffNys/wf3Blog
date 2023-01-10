@@ -37,7 +37,11 @@
 				</li>
 				{% for page in pages %}
 					<li class="page-item {% if actualPage == page %}active{% endif %} {% if '...' == page %}disable{% endif %}">
-						<a class="page-link" href="{{ path('app_article', {'page': page}) }}">{{ page }}</a>
+						{% if '...' == page %}
+							<span class="page-link">...</span>
+						{% else %}
+							<a class="page-link" href="{{ path('app_article', {'page': page}) }}">{{ page }}</a>
+						{% endif %}
 					</li>
 				{% endfor %}
 				<li class="page-item {% if actualPage == lastPage %}disabled{% endif %}">

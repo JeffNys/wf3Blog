@@ -9,6 +9,7 @@ use App\Entity\Comment;
 use App\Form\PublicCommentType;
 use App\Repository\ArticleRepository;
 use App\Repository\CommentRepository;
+use App\Service\PagingService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,12 +18,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ArticleController extends AbstractController
 {
     #[Route('/article/{page}', name: 'app_article', defaults: ["page" => 1])]
-    public function index(ArticleRepository $articleRepo, int $page): Response
-    {
-        $itemPerPage = 3;
-        $adjacents = 2;
+    public function index(
+        ArticleRepository $articleRepo,
+        int $page,
+        PagingService $pagingService,
+    ): Response {
+        $itemPerPage = 2;
+        $adjacents = 3;
         $itemsCount = $articleRepo->count([]);
-        $totalPages =  (int)floor($itemsCount / $itemPerPage);
+        $totalPages = (int)floor($itemsCount / $itemPerPage);
         // check if $page is consistent
         if ($page < 1) {
             $page = 1;
@@ -31,49 +35,9 @@ class ArticleController extends AbstractController
             $page = $totalPages;
         }
 
-        $pivot = 0;
-        $startFar = true;
-        $endFar = true;
-        $pages = [];
+        $pages = $pagingService->pagination($totalPages, $adjacents, $page);
 
-        if ($totalPages < 2 * $adjacents + 2) {
-            // if there is not enought page for respect adjacents
-            for ($i = 1; $i < $totalPages + 1; $i++) {
-                $pages[] = $i;
-            }
-        } else {
-            if ($page < $adjacents + 2) {
-                // if we are not so far to start
-                $pivot = $adjacents + 1;
-                $startFar = false;
-            } elseif ($page > $totalPages - ($adjacents + 1)) {
-                // if we are not so far to end
-                $pivot = $totalPages - $adjacents;
-                $endFar = false;
-            } else {
-                $pivot = $page;
-            }
-
-            $pages[] = $pivot;
-            for ($i = 1; $i < $adjacents - 1; $i++) {
-                array_push($pages, $pivot + $i);
-                array_unshift($pages, $pivot - $i);
-            }
-            if ($startFar) {
-                array_unshift($pages, "...");
-            } else {
-                array_unshift($pages, 2);
-            }
-
-            if ($endFar) {
-                array_push($pages, "...");
-            } else {
-                array_push($pages, $totalPages - 1);
-            }
-
-            array_push($pages, $totalPages);
-            array_unshift($pages, 1);
-        }
+        // dd($pages);
 
         $articles = $articleRepo->findBy(
             [],
